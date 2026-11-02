@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>قفزة الكواكب 🪐</title>
+</head>
+<body style="margin:0; background:#0b1226; touch-action:none">
+<canvas id="game" width="480" height="720" style="height:100vh; max-width:100%; display:block; margin:auto"></canvas>
+<script>
+const c = document.getElementById("game").getContext("2d")
+let planets, p, a, dir, spin, fly, vx, vy, x, y, cam
+let score = 0, best = 0, dead = true, last = 0
+let trail = [], pulse = 0
+const rnd = n => Math.random() * n
+const stars = [...Array(80)]
+  .map(() => [rnd(480), rnd(720), rnd(1)])
+const R = q => q.r + 36
+function addPlanet() {
+  const q = planets.at(-1)
+  const y = q.y - 230 - rnd(80)
+  planets.push({ x: 90 + rnd(300), y, r: 24 + rnd(16) })
+}
+function start() {
+  planets = [{ x: 240, y: 560, r: 34 }]
+  for (let i = 0; i < 4; i++) addPlanet()
+  p = 0; a = 0; dir = 1; spin = 0.045; fly = false
+  score = 0; cam = 0; dead = false; trail = []
+}
+start(); dead = true
+onpointerdown = () => {
+  if (dead) return start()
+  if (fly) return
+  fly = true
+  vx = -Math.sin(a) * dir * 9
+  vy = Math.cos(a) * dir * 9
+}
+onkeydown = onpointerdown
+function loop(t) {
+  const k = Math.min(2, (t - last) / 16.7 || 1); last = t
+  const q = planets[p], n = planets[p + 1]
+  if (!fly) {
+    if (!dead) a += spin * dir * k
+    x = q.x + Math.cos(a) * R(q)
+    y = q.y + Math.sin(a) * R(q)
+  } else if (!dead) {
+    x += vx * k; y += vy * k
+    const dx = x - n.x, dy = y - n.y
+    if (Math.hypot(dx, dy) < R(n) + 10) {
+      p++; fly = false; score++; spin += 0.003
+      a = Math.atan2(dy, dx); pulse = 1
+      dir = Math.sign(dx * vy - dy * vx) || 1
+      addPlanet()
+    }
+    const out = x < -30 || x > 510
+    if (out || y - cam < -30 || y - cam > 750) dead = true
+    if (dead) best = Math.max(best, score)
+  }
+  cam += (planets[p].y - 500 - cam) * 0.08 * k
+  const g = c.createLinearGradient(0, 0, 0, 720)
+  g.addColorStop(0, "#0b1226"); g.addColorStop(1, "#1b2a4a")
+  c.fillStyle = g; c.fillRect(0, 0, 480, 720)
+  for (const [sx, sy, d] of stars) {
+    c.fillStyle = `rgba(255,255,255,${0.2 + d * 0.6})`
+    const py = ((sy - cam * d * 0.5) % 720 + 720) % 720
+    c.fillRect(sx, py, 2, 2)
+  }
+  planets.forEach((q, i) => {
+    const sy = q.y - cam, hue = (i * 47 + 200) % 360
+    c.strokeStyle = i == p + 1 ? "#c9a961" : "#ffffff22"
+    c.setLineDash([6, 8]); c.beginPath()
+    c.arc(q.x, sy, R(q), 0, 7); c.stroke()
+    c.setLineDash([])
+    const pg = c.createRadialGradient(
+      q.x - 9, sy - 9, 2, q.x, sy, q.r)
+    pg.addColorStop(0, `hsl(${hue}, 90%, 75%)`)
+    pg.addColorStop(1, `hsl(${hue}, 70%, 30%)`)
+    c.shadowColor = `hsl(${hue}, 90%, 60%)`
+    c.shadowBlur = 30
+    c.fillStyle = pg; c.beginPath()
+    c.arc(q.x, sy, q.r, 0, 7); c.fill(); c.shadowBlur = 0
+    if (i % 3 == 2) {
+      c.strokeStyle = `hsla(${hue}, 80%, 80%, .7)`
+      c.beginPath()
+      c.ellipse(q.x, sy, q.r * 1.7, q.r * 0.4, -0.4, 0, 7)
+      c.stroke()
+    }
+  })
+  if (pulse > 0) {
+    c.strokeStyle = `rgba(201,169,97,${pulse})`
+    c.lineWidth = 3
+    c.beginPath()
+    const h = planets[p], pr = R(h) + (1 - pulse) * 60
+    c.arc(h.x, h.y - cam, pr, 0, 7)
+    c.stroke(); c.lineWidth = 1; pulse -= 0.04 * k
+  }
+  trail.push([x, y]); if (trail.length > 24) trail.shift()
+  trail.forEach(([tx, ty], i) => {
+    c.fillStyle = `rgba(255,215,120,${i / 40})`
+    c.beginPath(); c.arc(tx, ty - cam, i / 4, 0, 7)
+    c.fill()
+  })
+  c.shadowColor = "#ffd77a"; c.shadowBlur = 25
+  c.fillStyle = "white"; c.beginPath()
+  c.arc(x, y - cam, 8, 0, 7); c.fill(); c.shadowBlur = 0
+  c.textAlign = "center"; c.font = "bold 64px sans-serif"
+  c.fillText(score, 240, 100)
+  if (dead) {
+    c.fillStyle = "#0b1226cc"; c.fillRect(60, 135, 360, 105)
+    c.fillStyle = "white"; c.font = "bold 30px sans-serif"
+    c.fillText("اضغط لتقفز 👆", 240, 178)
+    c.fillText("أفضل نتيجة: " + best, 240, 222)
+  }
+  requestAnimationFrame(loop)
+}
+requestAnimationFrame(loop)
+</script>
+</body>
+</html>

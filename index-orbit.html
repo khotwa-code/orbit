@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>قفزة الكواكب 🪐 | خطوة</title>
+<meta name="description" content="لعبة فضاء بحوالي 100 سطر من JavaScript. العبها، وانسخ الكود، وشغّله على جهازك.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@600&family=Noto+Kufi+Arabic:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B2845;--gold:#C9A961;--paper:#F8F5F0;--ink:#1B2845;--soft:#5a6580;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Kufi Arabic',sans-serif;line-height:1.7}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;align-items:center;gap:10px;font-family:'Reem Kufi',sans-serif;font-size:30px}
+header svg{width:48px;height:40px}
+h1{font-family:'Reem Kufi',sans-serif;font-size:40px;line-height:1.25;margin-top:22px}
+.sub{color:var(--soft);font-size:17px;margin-top:6px}
+.sub b{color:#a9813a;font-family:'JetBrains Mono',monospace}
+.game{margin-top:22px;background:#0d1426;border-radius:34px;padding:10px;box-shadow:0 14px 34px rgba(27,40,69,.25)}
+.game iframe{display:block;width:100%;height:min(68vh,560px);border:0;border-radius:26px;background:#1b2a4a}
+.hint{text-align:center;color:var(--soft);font-size:15px;margin-top:10px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border-radius:16px;border:0;font:600 16px 'Noto Kufi Arabic',sans-serif;text-decoration:none;cursor:pointer}
+.btn.main{grid-column:1/-1;background:var(--gold);color:var(--navy);font-size:18px}
+.btn.alt{background:var(--navy);color:#fff}
+.card{background:var(--card);border-radius:22px;padding:20px;margin-top:26px;box-shadow:0 8px 22px rgba(27,40,69,.08);border-top:5px solid var(--gold)}
+.card h2{font-family:'Reem Kufi',sans-serif;font-size:26px}
+.card ol{padding-right:22px;margin-top:8px}
+.card li{margin:6px 0}
+code.i{font-family:'JetBrains Mono',monospace;background:#f1ece2;padding:1px 6px;border-radius:6px;direction:ltr;unicode-bidi:isolate;font-size:14px}
+.code{margin-top:14px;background:var(--navy);border-radius:18px;overflow:hidden}
+.code .bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16213a;color:#8a96b3;font:500 14px 'JetBrains Mono',monospace;direction:ltr}
+.code .bar button{background:var(--gold);color:var(--navy);border:0;border-radius:10px;padding:6px 12px;font:600 14px 'Noto Kufi Arabic',sans-serif;cursor:pointer}
+pre{direction:ltr;text-align:left;overflow:auto;max-height:420px;padding:14px;color:#E4E8F1;font:500 13px/1.6 'JetBrains Mono',monospace;font-variant-ligatures:none}
+.challenge{text-align:center}
+.challenge p{margin-top:6px;color:var(--soft)}
+.challenge a{color:#a9813a;font-weight:700}
+footer{text-align:center;color:#9aa3b8;font:500 14px 'JetBrains Mono',monospace;margin-top:30px;direction:ltr}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:30px;transition:transform .25s;font-weight:600}
+.toast.on{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg viewBox="0 0 120 100" aria-hidden="true"><polyline points="32,14 12,50 32,86" fill="none" stroke="#C9A961" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="88,14 108,50 88,86" fill="none" stroke="#C9A961" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="38,70 52,70 52,58 66,58 66,46 80,46" fill="none" stroke="#1B2845" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="30" r="6" fill="#C9A961"/></svg>
+    <span>خطوة</span>
+  </header>
+
+  <h1>قفزة الكواكب 🪐</h1>
+  <p class="sub">لعبة فضاء بحوالي <b>100</b> سطر من <b>JavaScript</b>. العبها هنا، ثم خذ الكود وشغّله على جهازك.</p>
+
+  <div class="game"><iframe src="orbit.html" title="لعبة قفزة الكواكب"></iframe></div>
+  <p class="hint">اضغط في اللحظة المناسبة ليقفز المذنّب 👆 · على الحاسوب: الماوس أو زر المسافة</p>
+
+  <div class="btns">
+    <a class="btn main" href="orbit.html">▶ العب بملء الشاشة</a>
+    <button class="btn alt" id="copy">📋 نسخ الكود</button>
+    <a class="btn alt" href="orbit.html" download="orbit.html">⬇ تحميل الملف</a>
+  </div>
+
+  <section class="card">
+    <h2>شغّلها على حاسوبك في دقيقة</h2>
+    <ol>
+      <li>اضغط <b>«نسخ الكود»</b> أو <b>«تحميل الملف»</b>.</li>
+      <li>افتح VS Code أو المفكّرة، والصق الكود في ملف جديد.</li>
+      <li>احفظه باسم <code class="i">orbit.html</code>.</li>
+      <li>افتح الملف في المتصفح (Chrome أو Edge)… والعب!</li>
+    </ol>
+    <div class="code">
+      <div class="bar"><span>orbit.html</span><button id="copy2">نسخ</button></div>
+      <pre id="src">…</pre>
+    </div>
+  </section>
+
+  <section class="card challenge">
+    <h2>كم كوكباً قفزت؟ 🏆</h2>
+    <p>اكتب رقمك في تعليقات الريل، وأرسل الصفحة لصديق لترى من يفوز.</p>
+    <p><a href="https://www.instagram.com/khotwa.code/">@khotwa.code</a> · كل محترف بدأ بخطوة</p>
+  </section>
+
+  <footer>@khotwa.code</footer>
+</div>
+<div class="toast" id="toast">تم نسخ الكود ✅</div>
+<script>
+let code = ""
+fetch("orbit.html").then(r => r.text()).then(t => {
+  code = t
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;")
+  // نعزل النص العربي داخل كل سطر حتى لا ينقلب ترتيب الكود عند العرض
+  document.getElementById("src").innerHTML = esc(t)
+    .replace(/[\u0600-\u06FF][^"<`]*/g, m => `<bdi dir="rtl">${m}</bdi>`)
+})
+  .catch(() => { document.getElementById("src").textContent = "تعذّر تحميل الكود. استعمل زر «تحميل الملف»." })
+async function copy() {
+  try { await navigator.clipboard.writeText(code) }
+  catch { const a = document.createElement("textarea"); a.value = code; document.body.appendChild(a); a.select(); document.execCommand("copy"); a.remove() }
+  const t = document.getElementById("toast"); t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 1800)
+}
+document.getElementById("copy").onclick = copy
+document.getElementById("copy2").onclick = copy
+</script>
+</body>
+</html>
